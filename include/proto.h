@@ -44,7 +44,7 @@ typedef struct s_sem{
 /* 以下是系统调用相关 */
 /* proc.c */
 PUBLIC  int     sys_get_ticks();        /* sys_call */
-PUBLIC 	void	sys_disp_color_str(char *buf,int color);
+PUBLIC 	void	sys_disp_str(char *buf,int color);
 PUBLIC  void    sys_process_sleep(int milli_sec);
 PUBLIC  void    sys_sem_p(SEMAPHORE* sem,int index);
 PUBLIC  void    sys_sem_v(SEMAPHORE* sem);

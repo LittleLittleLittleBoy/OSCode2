@@ -52,7 +52,7 @@ PUBLIC void sys_process_sleep(int milli_sec)
 }
 
 //sys_disp_color_str
-PUBLIC void sys_disp_color_str(char* str,int color)
+PUBLIC void sys_disp_str(char* str,int color)
 {
 	disp_color_str(str,color);
 }

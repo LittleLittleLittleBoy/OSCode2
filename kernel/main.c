@@ -161,7 +161,8 @@ void  clientA()
 			showGetService(my_id);
 			
 		}else{
-			sem_v(&mutex);	
+			sem_v(&mutex);
+			sem_v(&mutex);
 			showLeave(my_id);	
 		}
 		sleep(1000);
@@ -189,6 +190,7 @@ void  clientB()
 			
 		}else{
 			sem_v(&mutex);	
+			sem_v(&mutex);
 			showLeave(my_id);		
 		}
 		sleep(1000);
@@ -215,7 +217,8 @@ void  clientC()
 			showGetService(my_id);
 			
 		}else{
-			sem_v(&mutex);	
+			sem_v(&mutex);
+			sem_v(&mutex);
 			showLeave(my_id);	
 		}
 		sleep(1000);

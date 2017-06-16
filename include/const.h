@@ -81,7 +81,7 @@
 
 
 /* 队列初始化*/
-#define CHAIRS 		2
+#define CHAIRS 		3
 #define queueSize	5
 
 #endif /* _ORANGES_CONST_H_ */
