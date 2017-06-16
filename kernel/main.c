@@ -14,6 +14,11 @@
 #include "global.h"
 
 
+
+void showGetService(int id);
+void showComeIn(int id);
+void showNumber(char* str,int num);
+
 /*======================================================================*
                             kernel_main
  *======================================================================*/
@@ -61,12 +66,37 @@ PUBLIC int kernel_main()
 		selector_ldt += 1 << 3;
 	}
 
-	proc_table[0].ticks = proc_table[0].priority = 15;
-	proc_table[1].ticks = proc_table[1].priority =  5;
-	proc_table[2].ticks = proc_table[2].priority =  3;
+	//每个进程初始化
+	proc_table[0].ticks = proc_table[0].blocked = 0;
+	proc_table[1].ticks = proc_table[0].blocked = 0;
+	proc_table[2].ticks = proc_table[0].blocked = 0;
+	proc_table[3].ticks = proc_table[0].blocked = 0;
+	proc_table[4].ticks = proc_table[0].blocked = 0;
+	
 
+	//清屏
+	disp_pos = 0;
+	for(i=0;i<80*25;i++){
+		disp_str(" ");	
+	}
+	disp_pos = 0;
+	
 	k_reenter = 0;
 	ticks = 0;
+	id = 0;	
+
+	//场景全局参数初始化
+	waiting = 0;
+	customers.value = 0;
+	customers.in = 0;
+	customers.out = 0;
+	mutex.value = 1;
+	mutex.in = 0;
+	mutex.out = 0;
+	barbers.value = 0;
+	barbers.in = 0;
+	barbers.out = 0;
+	
 
 	p_proc_ready	= proc_table;
 
@@ -88,33 +118,163 @@ PUBLIC int kernel_main()
  *======================================================================*/
 void TestA()
 {
-	int i = 0;
 	while (1) {
-		disp_str("A.");
-		milli_delay(10);
+		milli_delay(100);
 	}
 }
 
 /*======================================================================*
-                               TestB
+                               barber
  *======================================================================*/
-void TestB()
+void barber()
 {
-	int i = 0x1000;
+
 	while(1){
-		disp_str("B.");
-		milli_delay(10);
+		sem_p(&customers,1);
+		sem_p(&mutex,1);
+		waiting--;
+		print("barber cut hair\n",MAKE_COLOR(BLACK,BLUE));
+		sem_v(&barbers);
+		sem_v(&mutex);
+
+		sleep(2000);
 	}
 }
 
 /*======================================================================*
-                               TestB
+                               customerA
  *======================================================================*/
-void TestC()
+void  clientA()
 {
-	int i = 0x2000;
+
 	while(1){
-		disp_str("C.");
-		milli_delay(10);
+		
+		int my_id = id;
+		id++;
+		showComeIn(my_id);
+		sem_p(&mutex,2);
+		if(waiting<CHAIRS){
+			waiting++;
+			sem_v(&customers);
+			sem_v(&mutex);
+			sem_p(&barbers,2);	
+			showGetService(my_id);
+			
+		}else{
+			sem_v(&mutex);	
+			showLeave(my_id);	
+		}
+		sleep(1000);
 	}
+}
+
+
+/*======================================================================*
+                               customerB
+ *======================================================================*/
+void  clientB()
+{
+	
+	while(1){
+		int my_id = id;
+		id++;
+		showComeIn(my_id);	
+		sem_p(&mutex,3);
+		if(waiting<CHAIRS){
+			waiting++;
+			sem_v(&customers);
+			sem_v(&mutex);
+			sem_p(&barbers,3);	
+			showGetService(my_id);
+			
+		}else{
+			sem_v(&mutex);	
+			showLeave(my_id);		
+		}
+		sleep(1000);
+	}
+}
+
+/*======================================================================*
+                               customerC
+ *======================================================================*/
+void  clientC()
+{
+
+	while(1){
+		int my_id = id;
+		id++;
+		showComeIn(my_id);				
+		sem_p(&mutex,4);
+		if(waiting<CHAIRS){
+			waiting++;
+			sem_v(&customers);
+			sem_v(&mutex);
+			sem_p(&barbers,4);
+		
+			showGetService(my_id);
+			
+		}else{
+			sem_v(&mutex);	
+			showLeave(my_id);	
+		}
+		sleep(1000);
+	}
+}
+
+
+
+void showComeIn(int id){
+	print("client ",MAKE_COLOR(BLACK,RED));
+	char output [16];
+	showNumber(output,id);
+	print(output,MAKE_COLOR(BLACK,RED));
+	print(" come in\n",MAKE_COLOR(BLACK,RED));
+}
+
+void showGetService(int id){
+	print("client " ,MAKE_COLOR(BLACK,RED));
+	char output [16];
+	showNumber(output,id);
+	print(output,MAKE_COLOR(BLACK,RED));
+	print(" get service and go\n",MAKE_COLOR(BLACK,RED));
+
+}
+
+void showLeave(int id){
+	print("client ",MAKE_COLOR(BLACK,RED));
+	char output [16];
+	showNumber(output,id);
+	print(output,MAKE_COLOR(BLACK,RED));
+	print(" go\n",MAKE_COLOR(BLACK,RED));
+	
+}
+
+
+void showNumber(char* str,int num){
+	char *	p = str;
+	char	ch;
+	int	i;
+	int	flag = FALSE;
+
+	if(num == 0){
+		*p++ = '0';
+	}
+	else{	
+		//8位每一位进行判断
+		for(i=28;i>=0;i-=4){
+			ch = (num >> i) & 0xF;
+			if(flag || (ch > 0)){
+				flag = TRUE;
+				ch += '0';
+				if(ch > '9'){
+					ch += 7;
+				}
+				*p++ = ch;
+			}
+		}
+	}
+
+	*p = '\0';
+	
 }

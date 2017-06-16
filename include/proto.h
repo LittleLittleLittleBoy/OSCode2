@@ -23,8 +23,10 @@ void restart();
 
 /* main.c */
 void TestA();
-void TestB();
-void TestC();
+void barber();
+void clientA();
+void clientB();
+void clientC();
 
 /* i8259.c */
 PUBLIC void put_irq_handler(int irq, irq_handler handler);
@@ -32,14 +34,27 @@ PUBLIC void spurious_irq(int irq);
 
 /* clock.c */
 PUBLIC void clock_handler(int irq);
-
-
+/* SEMAPHORE */
+typedef struct s_sem{
+	int	value;
+	int	list[queueSize];//进程队列
+	int     in;//队尾指针
+	int 	out;//队首指针
+}SEMAPHORE;
 /* 以下是系统调用相关 */
-
 /* proc.c */
 PUBLIC  int     sys_get_ticks();        /* sys_call */
-
+PUBLIC 	void	sys_disp_color_str(char *buf,int color);
+PUBLIC  void    sys_process_sleep(int milli_sec);
+PUBLIC  void    sys_sem_p(SEMAPHORE* sem,int index);
+PUBLIC  void    sys_sem_v(SEMAPHORE* sem);
 /* syscall.asm */
 PUBLIC  void    sys_call();             /* int_handler */
 PUBLIC  int     get_ticks();
+PUBLIC 	void	print(char *buf,int color);
+PUBLIC  void    sleep(int milli_sec);
+PUBLIC  void    sem_p(SEMAPHORE* sem,int index);
+PUBLIC  void    sem_v(SEMAPHORE* sem);
+
+
 

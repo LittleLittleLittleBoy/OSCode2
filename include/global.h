@@ -12,6 +12,14 @@
 #endif
 
 EXTERN	int		ticks;
+//信号量
+EXTERN  SEMAPHORE	customers;
+EXTERN  SEMAPHORE	barbers;
+EXTERN  SEMAPHORE	mutex;
+EXTERN  int		waiting;
+EXTERN  int		id;
+
+
 
 EXTERN	int		disp_pos;
 EXTERN	u8		gdt_ptr[6];	// 0~15:Limit  16~47:Base
