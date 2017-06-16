@@ -77,7 +77,7 @@
 #define MAKE_COLOR(x,y) (x | y) /* MAKE_COLOR(Background,Foreground) */
 
 /* system call */
-#define NR_SYS_CALL     6
+#define NR_SYS_CALL     5
 
 
 /* 队列初始化*/
