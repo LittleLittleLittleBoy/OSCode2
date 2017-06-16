@@ -70,6 +70,7 @@
 #define BLACK   0x0     /* 0000 */
 #define WHITE   0x7     /* 0111 */
 #define RED     0x4     /* 0100 */
+#define DUCKRED	0x5		/* 0101 */
 #define GREEN   0x2     /* 0010 */
 #define BLUE    0x1     /* 0001 */
 #define FLASH   0x80    /* 1000 0000 */

@@ -134,6 +134,7 @@ void barber()
 		sem_p(&mutex,1);
 		waiting--;
 		print("barber cut hair\n",MAKE_COLOR(BLACK,BLUE));
+		checkClear();
 		sem_v(&barbers);
 		sem_v(&mutex);
 
@@ -228,28 +229,37 @@ void  clientC()
 
 
 void showComeIn(int id){
-	print("client ",MAKE_COLOR(BLACK,RED));
+	print("client ",MAKE_COLOR(BLACK,DUCKRED));
+	checkClear();
 	char output [16];
 	showNumber(output,id);
-	print(output,MAKE_COLOR(BLACK,RED));
-	print(" come in\n",MAKE_COLOR(BLACK,RED));
+	print(output,MAKE_COLOR(BLACK,DUCKRED));
+	checkClear();
+	print(" come in\n",MAKE_COLOR(BLACK,DUCKRED));
+	checkClear();
 }
 
 void showGetService(int id){
-	print("client " ,MAKE_COLOR(BLACK,RED));
+	print("client " ,MAKE_COLOR(BLACK,DUCKRED));
+	checkClear();
 	char output [16];
 	showNumber(output,id);
-	print(output,MAKE_COLOR(BLACK,RED));
-	print(" get service and go\n",MAKE_COLOR(BLACK,RED));
+	print(output,MAKE_COLOR(BLACK,DUCKRED));
+	checkClear();
+	print(" get service and go\n",MAKE_COLOR(BLACK,DUCKRED));
+	checkClear();
 
 }
 
 void showLeave(int id){
-	print("client ",MAKE_COLOR(BLACK,RED));
+	print("client ",MAKE_COLOR(BLACK,DUCKRED));
+	checkClear();
 	char output [16];
 	showNumber(output,id);
-	print(output,MAKE_COLOR(BLACK,RED));
-	print(" go\n",MAKE_COLOR(BLACK,RED));
+	print(output,MAKE_COLOR(BLACK,DUCKRED));
+	checkClear();
+	print(" go\n",MAKE_COLOR(BLACK,DUCKRED));
+	checkClear();
 	
 }
 
@@ -280,4 +290,15 @@ void showNumber(char* str,int num){
 
 	*p = '\0';
 	
+}
+
+void checkClear(){
+	int i=0;
+	if (disp_pos>=80*24*2){
+		disp_pos=0;
+		for(i=0;i<80*25*2;i++){
+			disp_str(" ");	
+		}
+		disp_pos = 0;
+	}
 }
